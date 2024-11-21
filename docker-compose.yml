@@ -1,0 +1,27 @@
+version: '3'
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - rabbitmq
+      - redis
+
+  worker:
+    build: .
+    command: python -m worker.worker
+    depends_on:
+      - rabbitmq
+      - redis
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
