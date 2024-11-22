@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Union
 from fastapi import FastAPI, status, HTTPException
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import ORJSONResponse, RedirectResponse
 from pydantic import BaseModel
 
 app = FastAPI(
@@ -32,27 +32,26 @@ class Item(BaseModel):
     is_offer: Union[bool, None] = None
 
 
-@app.post("/scrape")
-async def scrape(cnpj: str):
-    task_id = await send_task_to_queue(cnpj)
-    return {"task_id": task_id}
-
-
-@app.get("/results/{task_id}")
-async def get_results(task_id: str):
-    status = await get_task_status(task_id)
-    if status == "completed":
-        result = await get_task_result(task_id)
-        return {"status": status, "result": result}
-    return {"status": status}
-
-
 @app.get("/",
          status_code=status.HTTP_200_OK,
-         description="sadasd sada s")
-async def read_root():
-    return {"Hello": "World"}
+         description="Home request, the root url redirects to /docs.")
+async def root():
+    return RedirectResponse("/docs")
 
+
+# @app.post("/scrape")
+# async def scrape(cnpj: str):
+#     task_id = await send_task_to_queue(cnpj)
+#     return {"task_id": task_id}
+
+
+# @app.get("/results/{task_id}")
+# async def get_results(task_id: str):
+#     status = await get_task_status(task_id)
+#     if status == "completed":
+#         result = await get_task_result(task_id)
+#         return {"status": status, "result": result}
+#     return {"status": status}
 
 @app.get("/items/{item_id}")
 async def read_item(item_id: int, q: Union[str, None] = None):
