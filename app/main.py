@@ -26,12 +26,6 @@ class Tags(Enum):
     users = "users"
 
 
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
-
-
 @app.get("/",
          status_code=status.HTTP_200_OK,
          description="Home request, the root url redirects to /docs.")
@@ -58,10 +52,21 @@ async def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
 
-@app.put("/items/{item_id}")
+class Message(BaseModel):
+    detail: str
+
+
+class Item(BaseModel):
+    name: str
+    price: float
+    is_offer: Union[bool, None] = None
+
+
+@app.put("/items/{item_id}",
+         responses={404: {"model": Message}})
 async def update_item(item_id: int, item: Item):
-    if not item_id:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    if item_id == 1:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Item not found")
     return {"item_name": item.name, "item_id": item_id}
 
 
