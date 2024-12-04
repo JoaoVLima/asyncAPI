@@ -33,19 +33,25 @@ async def root():
     return RedirectResponse("/docs")
 
 
-# @app.post("/scrape")
-# async def scrape(cnpj: str):
-#     task_id = await send_task_to_queue(cnpj)
-#     return {"task_id": task_id}
+@app.post("/scrape",
+         status_code=status.HTTP_200_OK,
+         description="Scrape request, sends the cnpj to the task queue")
+async def scrape(cnpj: str):
+    # task_id = await send_task_to_queue(cnpj)
+    return {"task_id": 1}
 
 
-# @app.get("/results/{task_id}")
-# async def get_results(task_id: str):
-#     status = await get_task_status(task_id)
-#     if status == "completed":
-#         result = await get_task_result(task_id)
-#         return {"status": status, "result": result}
-#     return {"status": status}
+@app.get("/results/{task_id}",
+         status_code=status.HTTP_200_OK,
+         description="Get Results request, get the results from the tasks")
+async def get_results(task_id: str):
+    # status = await get_task_status(task_id)
+    status = "wait"
+    if status == "completed":
+        # result = await get_task_result(task_id)
+        return {"status": status, "result": "deu certo"}
+    return {"status": status}
+
 
 @app.get("/items/{item_id}")
 async def read_item(item_id: int, q: Union[str, None] = None):
