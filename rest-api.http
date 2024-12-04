@@ -1,0 +1,7 @@
+### Scrape
+POST http://localhost:8000/scrape?cnpj=00012377000160
+Content-Type: application/json
+
+### Results
+GET http://localhost:8000/results/1/
+Content-Type: application/json
