@@ -42,8 +42,7 @@ com suporte a implantação via Docker.
 1. **Clone o repositório**:
 
     ```bash
-    git clone https://github.com/seu-usuario/web-scraping-api.git
-    cd web-scraping-api
+    git clone
     ```
 
 2. **Inicie os serviços** com Docker Compose:
